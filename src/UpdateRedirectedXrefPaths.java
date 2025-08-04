@@ -173,13 +173,7 @@ public class UpdateRedirectedXrefPaths {
                 StringBuilder fixedFile = new StringBuilder();
                 while (articleReader.hasNextLine()) {
                     StringBuilder line = new StringBuilder(articleReader.nextLine());
-                    String newlineEOL;
-                    if (articleReader.hasNextLine()) {
-                        newlineEOL = "\n";
-                    }
-                    else {
-                        newlineEOL = "";
-                    }
+                    String newlineEOL = "\n";
                     Matcher matcher = pattern.matcher(line);
                     if (matcher.find()) {
                         isFileTouched = true;
@@ -192,17 +186,23 @@ public class UpdateRedirectedXrefPaths {
                 }
                 articleReader.close();
                 if (isFileTouched) {
-                    try {
-                        FileWriter articleWriter = new FileWriter(article);
-                        articleWriter.write(String.valueOf(fixedFile));
-                        articleWriter.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    updateFile(article, fixedFile);
                 }
-            } catch (FileNotFoundException e) {
+            }
+            catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public static void updateFile(File fileToUpdate, StringBuilder updateContent) {
+        try {
+            FileWriter fileToUpdateWriter = new FileWriter(fileToUpdate);
+            fileToUpdateWriter.write(String.valueOf(updateContent));
+            fileToUpdateWriter.close();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
