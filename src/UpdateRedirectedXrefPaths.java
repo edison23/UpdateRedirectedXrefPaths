@@ -167,6 +167,7 @@ public class UpdateRedirectedXrefPaths {
             newTargetSanitized = referencePrefix + newTarget;
         }
         for (File article : sources) {
+            boolean isFileTouched = false;
             try {
                 Scanner articleReader = new Scanner(article);
                 StringBuilder fixedFile = new StringBuilder();
@@ -181,6 +182,7 @@ public class UpdateRedirectedXrefPaths {
                     }
                     Matcher matcher = pattern.matcher(line);
                     if (matcher.find()) {
+                        isFileTouched = true;
                         String fixedLine = matcher.replaceAll("xref:" + newTargetSanitized);
                         fixedFile.append(fixedLine).append(newlineEOL);
                     }
@@ -189,12 +191,14 @@ public class UpdateRedirectedXrefPaths {
                     }
                 }
                 articleReader.close();
-                try {
-                    FileWriter articleWriter = new FileWriter(article);
-                    articleWriter.write(String.valueOf(fixedFile));
-                    articleWriter.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (isFileTouched) {
+                    try {
+                        FileWriter articleWriter = new FileWriter(article);
+                        articleWriter.write(String.valueOf(fixedFile));
+                        articleWriter.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
