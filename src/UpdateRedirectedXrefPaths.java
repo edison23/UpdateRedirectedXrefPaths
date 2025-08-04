@@ -172,13 +172,20 @@ public class UpdateRedirectedXrefPaths {
                 StringBuilder fixedFile = new StringBuilder();
                 while (articleReader.hasNextLine()) {
                     StringBuilder line = new StringBuilder(articleReader.nextLine());
+                    String newlineEOL;
+                    if (articleReader.hasNextLine()) {
+                        newlineEOL = "\n";
+                    }
+                    else {
+                        newlineEOL = "";
+                    }
                     Matcher matcher = pattern.matcher(line);
                     if (matcher.find()) {
                         String fixedLine = matcher.replaceAll("xref:" + newTargetSanitized);
-                        fixedFile.append(fixedLine).append("\n");
+                        fixedFile.append(fixedLine).append(newlineEOL);
                     }
                     else {
-                        fixedFile.append(line).append("\n");
+                        fixedFile.append(line).append(newlineEOL);
                     }
                 }
                 articleReader.close();
