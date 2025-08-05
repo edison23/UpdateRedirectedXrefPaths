@@ -223,12 +223,21 @@ public class UpdateRedirectedXrefPaths {
     }
 
     public static void printHelp() {
-        String help = "This is Dokuro-chan, a tool to mercilessly bludgeon obsolete redirected paths from xrefs and replace them with up-to-date paths.\n" +
-                "Depends on redirects being specified in `:page-moved-from: /some/old/path` in .adoc files.\n" +
+        String help = "This is Dokuro-chan, a tool that mercilessly bludgeons obsolete redirected paths from xrefs and replaces them with up-to-date paths." +
+                "This is an abridged usage guide. For full documentation, refer to the home of the project: https://github.com/edison23/UpdateRedirectedXrefPaths\n" +
+                "Dokuro depends on redirects being specified using `:page-moved-from: /some/old/path` in .adoc files.\n" +
+                "The new xref paths are constructed from the location of the file containing the redirect." +
                 "Use these parameters:\n" +
-                "\t--root /home/dokuro/some/path\t\tSpecify where are the files to fix.\n" +
-                "\t--root-prefix /home/dokuro\t\tSpecify if you run this script o a portion of the whole portal, meaning the root from which to process files is somewhere lower than root of the portal but the xref paths must be valid relative to the portal root.\n" +
-                "\t--reference true\t\t\tSet if you're processing the reference section of the portal. Reference is special because physical paths don't match the files public URLs.\n" +
+                "\t--root /home/dokuro/projects/docs/guides\t\tSpecify where are the files to fix. This part of the path to files is also omitted from the new xref paths.\n" +
+                "\t--auxroot /home/dokuro/projects/other-docs/\t\tSpecify if your portal is split into two repositories, for instance, which must be both checked because they are interlinked." +
+                    "Files in this auxiliary root path are scanned for xrefs to be fixed, not for redirects." +
+                    "`-root` and `--auxroot` are not commutative. You need to run Dokuro-chan from the perspective of each path, i.e., twice, to fix the redirected paths in both." +
+                "\t--root-prefix /home/dokuro/projects/docs/\t\tSpecify if you run this script only for a portion of the whole portal, " +
+                    "meaning the actual root from which to process files is somewhere higher than specified using `--root` " +
+                    "but the xref paths must be valid relative to the portal root.\n" +
+                "\t--reference true\t\t\tSet if you're processing the reference section of the Evolveum midPoint docs portal." +
+                    "The reference is special because physical paths don't match the files public URLs - string `/midpoint/reference` needs to be added before the physical path." +
+                    "No need to use `--reference false`; just leave out the argument altogether.\n" +
                 "\t--help\t\t\t\t\tPrint this help.";
         System.out.println(help);
     }
