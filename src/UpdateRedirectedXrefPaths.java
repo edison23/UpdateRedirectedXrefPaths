@@ -35,7 +35,7 @@ public class UpdateRedirectedXrefPaths {
             }
 
             // The supplied argument is not in the right --key value format, warn user about it.
-            // This may not be a deal breaker if the required arguments are supplied in the right format;
+            // This may not be a dealbreaker if the required arguments are supplied in the right format;
             // in such a case, we just ignore the invalid arguments.
             else {
                 System.err.println("Ignoring invalid argument: " + args[i] + "\t\tCLI arguments must be key-value pairs: `--option1 value1 --option2 value2`");
@@ -43,6 +43,7 @@ public class UpdateRedirectedXrefPaths {
             i++;
         }
 
+        // Assign CLI arguments to control variables
         File rootPath;
         if (params.containsKey("root")) {
             rootPath = new File(params.get("root"));
@@ -50,6 +51,13 @@ public class UpdateRedirectedXrefPaths {
         else {
             System.err.println("Path to root missing. Use `--root /some/path`.");
             return;
+        }
+
+        File auxRootPath = null;
+        boolean auxRootSpecified = false;
+        if (params.containsKey("auxroot")) {
+            auxRootPath = new File(params.get("auxroot"));
+            auxRootSpecified = true;
         }
 
         String throwAwayRootPrefix;
@@ -78,14 +86,22 @@ public class UpdateRedirectedXrefPaths {
             referenceURL = "";
         }
 
+        // Get list of all files in both root and auxiliary root paths
         try {
             ArrayList<File> adocFiles = new ArrayList<>(listFiles(rootPath));
+            ArrayList<File> auxAdocFiles = new ArrayList<>();
+            if (auxRootSpecified) {
+                auxAdocFiles.addAll(listFiles(auxRootPath));
+            }
 
+            // Extract redirects (:page-moved-from:) from every listed file
+            // For every such redirect in a file, rewrite all xrefs that use the redirected path to the path of the current file. Do this in all listed files.
             for (File adocPage : adocFiles) {
                 ArrayList<String> redirectsInPage = getRedirects(adocPage);
                 if (!redirectsInPage.isEmpty()) {
                     for (String redirect : redirectsInPage) {
                         fixObsoleteXrefs(adocFiles, redirect, adocPage.getPath().replace(".adoc", "").replace(throwAwayRootPrefix, ""), referenceURL);
+                        fixObsoleteXrefs(auxAdocFiles, redirect, adocPage.getPath().replace(".adoc", "").replace(throwAwayRootPrefix, ""), referenceURL);
                     }
                 }
             }
@@ -123,7 +139,7 @@ public class UpdateRedirectedXrefPaths {
             }
         }
         catch (Exception e) {
-            System.err.println("Exception: " + e.getMessage());
+            System.err.println("Exception: " + e.getMessage() + " \n(Likely because nodesInDirectory for " + directory + " contains no files. Check the path.)");
         }
         return foundAdocFiles;
     }
