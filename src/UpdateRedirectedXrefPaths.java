@@ -100,10 +100,11 @@ public class UpdateRedirectedXrefPaths {
             // For every such redirect in a file, rewrite all xrefs that use the redirected path to the path of the current file. Do this in all listed files.
             for (File adocPage : adocFiles) {
                 ArrayList<String> redirectsInPage = getRedirects(adocPage);
+                String adjustedPhysicalFilePath = adocPage.getPath().replace("/index.adoc", "").replace(fileExtension, "").replace(throwAwayRootPrefix, "");
                 if (!redirectsInPage.isEmpty()) {
                     for (String redirect : redirectsInPage) {
-                        fixObsoleteXrefs(adocFiles, redirect, adocPage.getPath().replace(fileExtension, "").replace(throwAwayRootPrefix, ""), extraPathSegment);
-                        fixObsoleteXrefs(auxAdocFiles, redirect, adocPage.getPath().replace(fileExtension, "").replace(throwAwayRootPrefix, ""), extraPathSegment);
+                        fixObsoleteXrefs(adocFiles, redirect, adjustedPhysicalFilePath, extraPathSegment);
+                        fixObsoleteXrefs(auxAdocFiles, redirect, adjustedPhysicalFilePath, extraPathSegment);
                     }
                 }
             }
