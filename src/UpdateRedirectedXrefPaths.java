@@ -68,7 +68,6 @@ public class UpdateRedirectedXrefPaths {
             throwAwayRootPrefix = removeTrailingSlash(params.get("root-prefix"));
         }
         else {
-            System.out.println("WARNING: No root path prefix (throw-away prefix) provided. The `--root` argument value is used.");
             throwAwayRootPrefix = removeTrailingSlash(params.get("root"));
         }
 
