@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 public class UpdateRedirectedXrefPaths {
 
+    public static final String fileExtension = ".adoc";
+    public static final String extraPath = "/midpoint/reference";
+
     public static void main(String[] args) {
 
 
@@ -78,12 +81,12 @@ public class UpdateRedirectedXrefPaths {
             return;
         }
 
-        String referenceURL;
+        String extraPathSegment;
         if (isReference) {
-            referenceURL = "/midpoint/reference";
+            extraPathSegment = extraPath;
         }
         else {
-            referenceURL = "";
+            extraPathSegment = "";
         }
 
         // Get list of all files in both root and auxiliary root paths
@@ -100,8 +103,8 @@ public class UpdateRedirectedXrefPaths {
                 ArrayList<String> redirectsInPage = getRedirects(adocPage);
                 if (!redirectsInPage.isEmpty()) {
                     for (String redirect : redirectsInPage) {
-                        fixObsoleteXrefs(adocFiles, redirect, adocPage.getPath().replace(".adoc", "").replace(throwAwayRootPrefix, ""), referenceURL);
-                        fixObsoleteXrefs(auxAdocFiles, redirect, adocPage.getPath().replace(".adoc", "").replace(throwAwayRootPrefix, ""), referenceURL);
+                        fixObsoleteXrefs(adocFiles, redirect, adocPage.getPath().replace(fileExtension, "").replace(throwAwayRootPrefix, ""), extraPathSegment);
+                        fixObsoleteXrefs(auxAdocFiles, redirect, adocPage.getPath().replace(fileExtension, "").replace(throwAwayRootPrefix, ""), extraPathSegment);
                     }
                 }
             }
@@ -129,7 +132,7 @@ public class UpdateRedirectedXrefPaths {
             File[] nodesInDirectory = directory.listFiles();
             for (File node : nodesInDirectory) {
                 if (node.isFile()) {
-                    if (node.getName().endsWith(".adoc")) {
+                    if (node.getName().endsWith(fileExtension)) {
                         foundAdocFiles.add(node);
                     }
                 }
@@ -223,7 +226,7 @@ public class UpdateRedirectedXrefPaths {
     }
 
     public static void printHelp() {
-        String help = "This is Dokuro-chan, a tool that mercilessly bludgeons obsolete redirected paths from xrefs and replaces them with up-to-date paths." +
+        String help = "Thipc maintenance - install IntelliJ Ideas is Dokuro-chan, a tool that mercilessly bludgeons obsolete redirected paths from xrefs and replaces them with up-to-date paths." +
                 "This is an abridged usage guide. For full documentation, refer to the home of the project: https://github.com/edison23/UpdateRedirectedXrefPaths\n" +
                 "Dokuro depends on redirects being specified using `:page-moved-from: /some/old/path` in .adoc files.\n" +
                 "The new xref paths are constructed from the location of the file containing the redirect." +
