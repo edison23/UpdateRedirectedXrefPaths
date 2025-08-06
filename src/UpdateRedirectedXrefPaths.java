@@ -226,16 +226,17 @@ public class UpdateRedirectedXrefPaths {
     }
 
     public static void printHelp() {
-        String help = "This is Dokuro-chan, a tool that mercilessly bludgeons obsolete redirected paths from xrefs and replaces them with up-to-date paths.\n" +
-                "Refer to https://github.com/edison23/UpdateRedirectedXrefPaths for full documentation.\n" +
-                "Dokuro depends on redirects being specified using `:page-moved-from: /some/old/path` in .adoc files.\n" +
-                "The new xref paths are constructed from the location of the file containing the redirect.\n" +
-                "Use these parameters:\n" +
-                "\t--root\t\tPath to the files to fix. This part of the path to files is also omitted from the new xref paths.\n" +
-                "\t--auxroot\tPath to a second root. Specify if your portal is split to two trees which are interlinked and both need xrefs fixed.\n" +
-                "\t--root-prefix\tSpecify if you run Dokuro only for portion of the whole tree. The path here needs to be substring of the `--root` argument and is thrown away.\n" +
-                "\t--reference\tSet to `true` if you need to prefix the physical paths to files with an arbitrary string. Omit altogether instead of `false`.\n" +
-                "\t--help\t\tPrint this help.";
+        String help = """
+                This is Dokuro-chan, a tool that mercilessly bludgeons obsolete redirected paths from xrefs and replaces them with up-to-date paths.
+                Refer to https://github.com/edison23/UpdateRedirectedXrefPaths for full documentation.
+                Dokuro depends on redirects being specified using `:page-moved-from: /some/old/path` in .adoc files.
+                The new xref paths are constructed from the location of the file containing the redirect.
+                Use these parameters:
+                \t--root\t\tPath to the files to fix. This part of the path to files is also omitted from the new xref paths.
+                \t--auxroot\tPath to a second root. Specify if your portal is split to two trees which are interlinked and both need xrefs fixed.
+                \t--root-prefix\tSpecify if you run Dokuro only for portion of the whole tree. The path here needs to be substring of the `--root` argument and is thrown away.
+                \t--reference\tSet to `true` if you need to prefix the physical paths to files with an arbitrary string. Omit altogether instead of `false`.
+                \t--help\t\tPrint this help.""";
         System.out.println(help);
     }
 }
